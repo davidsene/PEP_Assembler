@@ -10,7 +10,7 @@ import org.apache.commons.cli.ParseException;
 
 
 /**
- * BrainF*ck Launcher
+ * Launcher
  */
 public class Launcher {
 
@@ -54,7 +54,7 @@ public class Launcher {
 		try {
 
 			/**
-			 * Get the BrainF*ck Program
+			 * Get the  Program
 			 * and sanitize the filename
 			 */
 			

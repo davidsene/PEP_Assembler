@@ -7,7 +7,7 @@ public abstract class Instruction {
 	public static final String CAT_A_CODE="00";
 	public static final String CAT_B_CODE="010000";
 	public static final String CAT_C_CODE="0101";
-	public static final String CAT_D_CODE="1001";
+	public static final String CAT_D_CODE="1001"; //To not modify
 	
 	public static final String LABEL_AND_OPER_SEPARATOR = " ";
 	public static final String MULTI_OPER_SEPARATOR = ",";

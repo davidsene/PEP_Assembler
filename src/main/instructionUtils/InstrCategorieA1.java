@@ -1,6 +1,7 @@
 package main.instructionUtils;
 
 import main.AssemblerException;
+import main.InstructionLabel;
 import main.Register;
 
 public class InstrCategorieA1 extends Instruction {
@@ -12,8 +13,8 @@ public class InstrCategorieA1 extends Instruction {
 	private Register   Rd;
 	
 	
-	public InstrCategorieA1( String opCode, Register rd, Register rm, String imm5) throws AssemblerException{
-		super(opCode);
+	public InstrCategorieA1( InstructionLabel concreteOperation, Register rd, Register rm, String imm5) throws AssemblerException{
+		super(concreteOperation);
 		this.setCategorieCode(CAT_A_CODE);
 		this.setImm5(imm5);
 		this.setRd(rd);
@@ -62,9 +63,10 @@ public class InstrCategorieA1 extends Instruction {
 
 	@Override
 	public void BuildBinaryStringcode() {
+		
 		String binaryCode =  new StringBuilder()
 				             .append(this.getCategorieCode())
-				             .append(this.getOperationCode())
+				             .append(this.getConcreteOperation().getCodeOp())
 				             .append(this.imm5)
 				             .append(this.Rm.toBinaryString())
 				             .append(this.Rd.toBinaryString())

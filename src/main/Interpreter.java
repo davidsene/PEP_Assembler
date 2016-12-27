@@ -25,7 +25,7 @@ public class Interpreter {
 			while (line != null) {
 	
 				Instruction instruction = InstructionFactory.getInstruction(line);
-				System.out.println(instruction.toBinCode());
+				//System.out.println(instruction.toBinCode());
 				System.out.println(instruction.toHexCode());
 				
 				line = program.getNextLine();

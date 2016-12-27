@@ -1,11 +1,14 @@
 package main.instructionUtils;
 
 import main.AssemblerException;
+import main.InstructionLabel;
 
 public class InstrCategorieB1 extends Instruction {
 	
-	public InstrCategorieB1(String opCode) throws AssemblerException {
-		super(opCode);
+	
+
+	public InstrCategorieB1(InstructionLabel concreteOperation) throws AssemblerException {
+		super(concreteOperation);
 		// TODO Auto-generated constructor stub
 	}
 

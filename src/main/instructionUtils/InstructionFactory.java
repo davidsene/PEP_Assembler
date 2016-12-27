@@ -39,7 +39,7 @@ public class InstructionFactory {
 		    if (operande.length!=3) {
 				throw new AssemblerException("Syntax Error : Bad number of operandes : Near : '" + line , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
 			}
-		    return new InstrCategorieA1(iLabel.getCodeOp(),Register.getRegister(operande[0].trim()),Register.getRegister(operande[1].trim()),operande[2].trim());
+		    return new InstrCategorieA1(iLabel,Register.getRegister(operande[0].trim()),Register.getRegister(operande[1].trim()),operande[2].trim());
 		    
 	}
 

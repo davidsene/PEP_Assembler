@@ -1,6 +1,7 @@
 package main.instructionUtils;
 
 import main.AssemblerException;
+import main.InstructionLabel;
 
 public abstract class Instruction {
 	
@@ -19,14 +20,14 @@ public abstract class Instruction {
 	private String categorieCode;
 	
 	
-	private String operationCode;
+	private InstructionLabel concreteOperation;
 	
 	
 	private String binaryStringCode;
 	
 	
-	public Instruction(String opCode) throws AssemblerException{
-		this.setOperationCode(opCode);
+	public Instruction(InstructionLabel concreteOperation) throws AssemblerException{
+		this.setConcreteOperation(concreteOperation);
 	}
 	
 	
@@ -42,7 +43,7 @@ public abstract class Instruction {
 	public String toHexCode() {
 		this.BuildBinaryStringcode();
 		String val;
-		StringBuilder builder = new StringBuilder("0x");
+		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i <= 12; i=i+4) {
 			val = binaryStringCode.substring(i,i+4);
 			builder.append(Integer.toHexString(Integer.parseInt(val,2)));
@@ -57,9 +58,7 @@ public abstract class Instruction {
 	}
 	
 	
-	public String getOperationCode() {
-		return operationCode;
-	}
+
 	
 	
 	public String getBinaryStringCode() {
@@ -76,13 +75,17 @@ public abstract class Instruction {
 
 	
 
-	protected void setOperationCode(String operationCode) {
-		if( operationCode== null || operationCode.isEmpty() )
-			throw new RuntimeException("Operation Code setting Error");
-		this.operationCode = operationCode;
+	protected InstructionLabel getConcreteOperation() {
+		return concreteOperation;
 	}
 
-	
+
+	protected void setConcreteOperation(InstructionLabel concreteOperation) {
+		if( concreteOperation == null )
+			 throw new RuntimeException("Concrete Operation setting Error");
+		this.concreteOperation = concreteOperation;
+	}
+
 
 	protected void setBinaryStringCode(String binaryStringCode) {
 		

@@ -42,6 +42,7 @@ public class InstructionFactory {
 			
 			case A1: return buildInstCatA1(iLabel, operandesString);
 			case A2: return buildInstCatA2(iLabel, operandesString);
+			case A3: return buildInstCatA3(iLabel, operandesString);
 		
 
 		default:
@@ -85,6 +86,25 @@ public class InstructionFactory {
 		    InstructionLabel concreteOperation = iLabel;
 		    
 		    return new InstrCategorieA2(concreteOperation, rd, rn, rm);
+		   
+		    
+	}
+	
+	
+public static Instruction buildInstCatA3(InstructionLabel iLabel, String operandesString) throws AssemblerException{
+		
+		String [] operandesTab = operandesString.split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
+		    
+		    if (operandesTab.length != 2) {
+				throw new AssemblerException("Syntax Error : Bad number of operandes" , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+			}
+		    
+		    Register rd = Register.getRegister(operandesTab[0].trim());
+		    String imm8 = operandesTab[1].trim();
+		   
+		    InstructionLabel concreteOperation = iLabel;
+		    
+		    return new InstrCategorieA3(concreteOperation, rd, imm8);
 		   
 		    
 	}

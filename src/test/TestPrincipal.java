@@ -37,11 +37,21 @@ public class TestPrincipal {
 		
 		Instruction instruction2 = new InstrCategorieA2(InstructionLabel.SUB, Register.R6, Register.R3,  Register.R2);
 		
-		//0001 1010 1001 1110
 		
 		Assert.assertEquals("1927", instruction1.toHexCode());
 		Assert.assertEquals("1a9e", instruction2.toHexCode());
 	
+		
+	}
+	
+	
+	
+	@Test
+	public void InstructionCategorieA3test() throws AssemblerException {
+		
+		Instruction instruction = new InstrCategorieA3(InstructionLabel.MOV, Register.R6, "#250");
+		
+		Assert.assertEquals("26fa", instruction.toHexCode());
 		
 	}
 

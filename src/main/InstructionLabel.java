@@ -6,7 +6,8 @@ public enum InstructionLabel {
 	LSRI("001",Categorie.A1),
 	ASRI("010",Categorie.A1),
 	ADD("01100",Categorie.A2), 
-	SUB("01101",Categorie.A2);
+	SUB("01101",Categorie.A2),
+	MOV("100",Categorie.A3);
 	
 	
 	private String codeOp;
@@ -39,6 +40,7 @@ public enum InstructionLabel {
 			case "ASRI": return ASRI;
 			case "ADD": return ADD;
 			case "SUB": return SUB;
+			case "MOV": return MOV;
 			
 			default:
 				return null;

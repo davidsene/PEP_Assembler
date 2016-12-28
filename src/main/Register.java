@@ -25,7 +25,7 @@ public enum Register {
 		   case "R6": return Register.R6;
 		   case "R7": return Register.R7;
 		default:
-			throw new AssemblerException("Syntax Error. Bad register name",AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+			throw new AssemblerException("Syntax Error : Bad register name ",AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
 		}	
 	}
 

@@ -1,6 +1,7 @@
 package main.instructionUtils;
 
 import main.AssemblerException;
+import main.Categorie;
 import main.InstructionLabel;
 
 public class InstrCategorieD extends Instruction {
@@ -8,7 +9,7 @@ public class InstrCategorieD extends Instruction {
 	
 
 	public InstrCategorieD(InstructionLabel concreteOperation) throws AssemblerException {
-		super(concreteOperation);
+		super(Categorie.D,concreteOperation);
 		// TODO Auto-generated constructor stub
 	}
 

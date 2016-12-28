@@ -8,39 +8,85 @@ import main.Register;
 
 public class InstructionFactory {
 	
+	
+	
 	public static Instruction getInstruction(String line) throws AssemblerException {
 		
-		String[] tab = line.split(Instruction.LABEL_AND_OPER_SEPARATOR);
+		String lineToProcess = line.trim();
 		
-		if (tab.length<2) {
-			throw new AssemblerException("Syntax Error : Missing operandes : Near : '" + line , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		int firstSepPosition = lineToProcess.indexOf(Instruction.LABEL_AND_OPER_SEPARATOR);
+		
+		if(firstSepPosition==-1){
+			
+			InstructionLabel iLab = InstructionLabel.getInstructionLabel(lineToProcess);  //A little help for Debugging
+			
+			if(iLab == null)
+				throw new AssemblerException("Syntax Error : No separator between operation and operands OR bad operation syntax ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+			else 
+				throw new AssemblerException("Syntax Error : Missing Operand ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		
 		}
-		String instrWord = tab[0].trim();
+			
 		
-		InstructionLabel iLabel = InstructionLabel.getInstructionLabel(instrWord);;
+		String instrWord = lineToProcess.substring(0,firstSepPosition);
+
+		InstructionLabel iLabel = InstructionLabel.getInstructionLabel(instrWord);
+		
+		if(iLabel == null)
+			throw new AssemblerException("Syntax Error : Unknow Operation '"+ instrWord +"' ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		
+		String operandesString = lineToProcess.substring(firstSepPosition).trim();
+		
 		
 		switch (iLabel.getCategorie()) {
 			
-			case A1: return buildInstCat1(iLabel, tab[1], line);
+			case A1: return buildInstCatA1(iLabel, operandesString);
+			case A2: return buildInstCatA2(iLabel, operandesString);
 		
 
 		default:
 			return null;
-		}
-		
-		
+		}	
 	}
 	
 	
-	public static Instruction buildInstCat1(InstructionLabel iLabel, String oper,String line) throws AssemblerException{
+	
+	
+	public static Instruction buildInstCatA1(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
-		String [] operande = oper.split(Instruction.MULTI_OPER_SEPARATOR);
+		String [] operandesTab = operandesString.trim().split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
 		    
-		    if (operande.length!=3) {
-				throw new AssemblerException("Syntax Error : Bad number of operandes : Near : '" + line , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		    if (operandesTab.length != 3) {
+				throw new AssemblerException("Syntax Error : Bad number of operandes "  , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
 			}
-		    return new InstrCategorieA1(iLabel,Register.getRegister(operande[0].trim()),Register.getRegister(operande[1].trim()),operande[2].trim());
+		    
+		    Register rd = Register.getRegister(operandesTab[0].trim());
+		    Register rm = Register.getRegister(operandesTab[1].trim());
+		    String imm5 = operandesTab[2].trim();
+		    InstructionLabel concreteOperation = iLabel;
+		    
+		    return new InstrCategorieA1(concreteOperation,rd,rm,imm5);
 		    
 	}
-
+	
+	
+	
+	public static Instruction buildInstCatA2(InstructionLabel iLabel, String operandesString) throws AssemblerException{
+		
+		String [] operandesTab = operandesString.split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
+		    
+		    if (operandesTab.length!=3) {
+				throw new AssemblerException("Syntax Error : Bad number of operandes" , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+			}
+		    
+		    Register rd = Register.getRegister(operandesTab[0].trim());
+		    Register rn = Register.getRegister(operandesTab[1].trim());
+		    Register rm = Register.getRegister(operandesTab[2].trim());
+		    InstructionLabel concreteOperation = iLabel;
+		    
+		    return new InstrCategorieA2(concreteOperation, rd, rn, rm);
+		   
+		    
+	}
+	
 }

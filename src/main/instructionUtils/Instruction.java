@@ -1,23 +1,16 @@
 package main.instructionUtils;
 
 import main.AssemblerException;
+import main.Categorie;
 import main.InstructionLabel;
 
 public abstract class Instruction {
 	
-	public static final String CAT_A_CODE="00";
-	public static final String CAT_B_CODE="010000";
-	public static final String CAT_C_CODE="0101";
-	public static final String CAT_D_CODE="1001"; //To not modify
-	
 	public static final String LABEL_AND_OPER_SEPARATOR = " ";
+	
 	public static final String MULTI_OPER_SEPARATOR = ",";
 	
-	
-	
-	
-	
-	private String categorieCode;
+	private Categorie categorie;
 	
 	
 	private InstructionLabel concreteOperation;
@@ -26,14 +19,20 @@ public abstract class Instruction {
 	private String binaryStringCode;
 	
 	
-	public Instruction(InstructionLabel concreteOperation) throws AssemblerException{
+	public Instruction(Categorie categorie, InstructionLabel concreteOperation) throws AssemblerException{
+		
+		if( concreteOperation != null && concreteOperation.getCategorie() != categorie)
+			throw new RuntimeException("Unmatiching instruction et Categorie");
+		this.setCategorie(categorie);
 		this.setConcreteOperation(concreteOperation);
 	}
 	
 	
 	public abstract void BuildBinaryStringcode();
 	
+	
 	public String toBinCode() {
+		
 		this.BuildBinaryStringcode();
 		return this.getBinaryStringCode(); 
 		
@@ -41,24 +40,25 @@ public abstract class Instruction {
 	
 	
 	public String toHexCode() {
+		
 		this.BuildBinaryStringcode();
+		
 		String val;
 		StringBuilder builder = new StringBuilder();
+		
 		for (int i = 0; i <= 12; i=i+4) {
 			val = binaryStringCode.substring(i,i+4);
 			builder.append(Integer.toHexString(Integer.parseInt(val,2)));
 		}
+		
 		return builder.toString(); 
 		
 	}
 
 	
-	public String getCategorieCode() {
-		return categorieCode;
+	public Categorie getCategorie() {
+		return this.categorie;
 	}
-	
-	
-
 	
 	
 	public String getBinaryStringCode() {
@@ -67,10 +67,10 @@ public abstract class Instruction {
 	
 	
 
-	protected void setCategorieCode(String categorieCode) throws AssemblerException {
-		if( categorieCode== null || categorieCode.isEmpty() )
+	protected void setCategorie(Categorie categorie) throws AssemblerException {
+		if( categorie == null )
 			 throw new RuntimeException("Categorie Code setting Error");
-		this.categorieCode = categorieCode;
+		this.categorie = categorie;
 	}
 
 	
@@ -94,6 +94,7 @@ public abstract class Instruction {
 		}
 		this.binaryStringCode = binaryStringCode;
 	}
+	
 	
 	public static String normaliseTo_N_Bits(String word, int nbBits){
 		

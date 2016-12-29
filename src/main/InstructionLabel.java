@@ -5,10 +5,32 @@ public enum InstructionLabel {
 	LSLI("000",Categorie.A1),
 	LSRI("001",Categorie.A1),
 	ASRI("010",Categorie.A1),
+	
 	ADD("01100",Categorie.A2), 
 	SUB("01101",Categorie.A2),
-	MOV("100",Categorie.A3);
 	
+	MOV("100",Categorie.A3),
+	
+	//B1
+	AND("0000",Categorie.B),
+	EOR("0001",Categorie.B),
+	LSL("0010",Categorie.B),
+	LSR("0011",Categorie.B),
+	ASR("0100",Categorie.B),
+	ADC("0101",Categorie.B),
+	SUBC("0110",Categorie.B),
+	ROR("0111",Categorie.B),
+	ORR("1100",Categorie.B),
+	BIC("1110",Categorie.B),
+	//B2
+	TST("1000",Categorie.B),
+	CMP("1010",Categorie.B),
+	CMN("1011",Categorie.B),
+	//B3
+	RSB("1001",Categorie.B),
+	MVN("1111",Categorie.B),
+	//
+	MUL("1101",Categorie.B);
 	
 	private String codeOp;
 	
@@ -40,7 +62,24 @@ public enum InstructionLabel {
 			case "ASRI": return ASRI;
 			case "ADD": return ADD;
 			case "SUB": return SUB;
+			case "AND": return AND;
+			case "EOR": return EOR;
 			case "MOV": return MOV;
+			case "LSL": return LSL;
+			case "LSR": return LSR;
+			case "ASR": return ASR;
+			case "ADC": return ADC;
+			case "SUBC": return SUBC;
+			case "ROR": return ROR;
+			case "TST": return TST;
+			case "RSB": return RSB;
+			case "CMP": return CMP;
+			case "CMN": return CMN;
+			case "ORR": return ORR;
+			case "MUL": return MUL;
+			case "BIC": return BIC;
+			case "MVN": return MVN;
+			
 			
 			default:
 				return null;

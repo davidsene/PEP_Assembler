@@ -50,7 +50,7 @@ public class InstrCategorieA3 extends Instruction {
 	
 	public void setRd(Register rd) throws AssemblerException {
 		if (rd == null ) {
-			 throw new AssemblerException("Syntax Error on Rd declaration", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new RuntimeException("Trying to Set a null value in a Rd register");
 		}
 		Rd = rd;
 	}

@@ -9,7 +9,7 @@ import main.InstructionLabel;
 import main.Register;
 import main.instructionUtils.*;
 
-public class TestPrincipal {
+public class TestOperationsCategorieA {
 	
 	
 	@Test

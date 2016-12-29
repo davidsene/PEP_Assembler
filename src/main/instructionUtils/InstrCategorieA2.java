@@ -26,7 +26,7 @@ public class InstrCategorieA2 extends Instruction {
 
 	public void setRm(Register rm) throws AssemblerException {
 		if (rm == null ) {
-			 throw new AssemblerException("Syntax Error on Rm declaration", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new RuntimeException("Trying to Set a null value in a Rm register");
 		}
 		
 		Rm = rm;
@@ -36,7 +36,7 @@ public class InstrCategorieA2 extends Instruction {
 	public void setRn(Register rn) throws AssemblerException {
 		
 		if (rn == null ) {
-			 throw new AssemblerException("Syntax Error on Rn declaration", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new RuntimeException("Trying to Set a null value in a Rn register");
 		}
 		Rn = rn;
 	}
@@ -45,7 +45,7 @@ public class InstrCategorieA2 extends Instruction {
 
 	public void setRd(Register rd) throws AssemblerException {
 		if (rd == null ) {
-			 throw new AssemblerException("Syntax Error on Rd declaration", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new RuntimeException("Trying to Set a null value in a Rd register");
 		}
 		Rd = rd;
 	}

@@ -27,6 +27,10 @@ public class Variable {
 	public int getAdress() {
 		return adress;
 	}
+	
+	public String getAdressAsBinaryString() {
+		return "";
+	}
 
 	public void setAdress(int adress) {
 		this.adress = adress;

@@ -4,57 +4,71 @@ import main.AssemblerException;
 import main.Categorie;
 import main.InstructionLabel;
 import main.Register;
-import main.Variable;
 
 public class InstrCategorieC extends Instruction {
 	
-	private Variable variable;
+	private String imm8;
 	
-	private Register rt;
-	
-
+	private Register Rd;
 	
 
-	public InstrCategorieC(InstructionLabel concreteOperation, Variable variable, Register rt)throws AssemblerException {
-		super(Categorie.C, concreteOperation);
-		this.variable = variable;
-		this.rt = rt;
+	public InstrCategorieC(InstructionLabel concreteOperation,Register rd , String imm8) throws AssemblerException {
+		super(Categorie.C,concreteOperation);
+		this.setImm8(imm8);
+		this.setRd(rd);
+		
+		
 	}
 
-	protected int categorieCode = 0;
-
 	
+	private void setImm8(String imm8) throws AssemblerException {
+		
+		if (imm8 == null ) {
+			 throw new RuntimeException("Trying to Set a null value for imm8");
+		}
+		
+		if( ! imm8.trim().startsWith("#") )
+			throw new AssemblerException("Syntax Error : Bad Imm8 Syntax : Not Starting with '#' ", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+		
+		try {
+			
+			int val = Integer.parseUnsignedInt(imm8.substring(1));
+			
+			if (val>255 ) 
+				throw new AssemblerException("Syntax Error : Imm8 value Out of Bound ", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			 
+			this.imm8 = Instruction.normaliseTo_N_Bits(Integer.toBinaryString(val),8);
+			
+		} 
+		catch (NumberFormatException e) {
+			
+			 throw new AssemblerException("Syntax Error : Bad Imm8 value Format ", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+		}
+	
+	}
+	
+	
+	public void setRd(Register rd) throws AssemblerException {
+		if (rd == null ) {
+			throw new RuntimeException("Trying to Set a null value in a Rd register");
+		}
+		Rd = rd;
+	}
+	
+	
+	
+	
+
 	@Override
 	public void BuildBinaryStringcode() {
 		String binaryCode =  new StringBuilder()
 	             .append(this.getCategorie().getCode())
 	             .append(this.getConcreteOperation().getCodeOp())
-	             .append(this.rt.toBinaryString())
-	             .append(this.variable.getAdressAsBinaryString())
+	             .append(this.Rd.toBinaryString())
+	             .append(this.imm8)
 	             .toString();
-      this.setBinaryStringCode(binaryCode);
+        this.setBinaryStringCode(binaryCode);
 		
 	}
-	
-
-	public void setVariable(Variable var) {
-		
-		if (var == null ) {
-			throw new RuntimeException("Trying to Set a null value as variable");
-		}
-		this.variable = var;
-	}
-
-	public void setRt(Register r) {
-		
-		if (r == null ) {
-			throw new RuntimeException("Trying to Set a null value in a register ");
-		}
-		
-		this.rt = r;
-	}
-
-	
-	
 
 }

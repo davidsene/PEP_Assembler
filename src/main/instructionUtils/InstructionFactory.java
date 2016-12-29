@@ -44,6 +44,7 @@ public class InstructionFactory {
 			case A2: return buildInstCatA2(iLabel, operandesString);
 			case A3: return buildInstCatA3(iLabel, operandesString);
 			case B: return buildInstCatB(iLabel, operandesString);
+			case C: return buildInstCatC(iLabel, operandesString);
 
 		default:
 			return null;
@@ -55,18 +56,14 @@ public class InstructionFactory {
 	
 	public static Instruction buildInstCatA1(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
-		String [] operandesTab = operandesString.trim().split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
+		String [] operandesTab = processOperands(operandesString,3);
 		    
-		    if (operandesTab.length != 3) {
-				throw new AssemblerException("Syntax Error : Bad number of operandes "  , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
-			}
+		Register rd = Register.getRegister(operandesTab[0].trim());
+		Register rm = Register.getRegister(operandesTab[1].trim());
+		String imm5 = operandesTab[2].trim();
+		InstructionLabel concreteOperation = iLabel;
 		    
-		    Register rd = Register.getRegister(operandesTab[0].trim());
-		    Register rm = Register.getRegister(operandesTab[1].trim());
-		    String imm5 = operandesTab[2].trim();
-		    InstructionLabel concreteOperation = iLabel;
-		    
-		    return new InstrCategorieA1(concreteOperation,rd,rm,imm5);
+		return new InstrCategorieA1(concreteOperation,rd,rm,imm5);
 		    
 	}
 	
@@ -74,11 +71,7 @@ public class InstructionFactory {
 	
 	public static Instruction buildInstCatA2(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
-		String [] operandesTab = operandesString.split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
-		    
-		    if (operandesTab.length!=3) {
-				throw new AssemblerException("Syntax Error : Bad number of operandes" , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
-			}
+		String [] operandesTab = processOperands(operandesString,3);
 		    
 		    Register rd = Register.getRegister(operandesTab[0].trim());
 		    Register rn = Register.getRegister(operandesTab[1].trim());
@@ -86,18 +79,13 @@ public class InstructionFactory {
 		    InstructionLabel concreteOperation = iLabel;
 		    
 		    return new InstrCategorieA2(concreteOperation, rd, rn, rm);
-		   
-		    
+		       
 	}
 	
 	
 	public static Instruction buildInstCatA3(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
-		String [] operandesTab = operandesString.split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
-		    
-		    if (operandesTab.length != 2) {
-				throw new AssemblerException("Syntax Error : Bad number of operandes" , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
-			}
+		String [] operandesTab = processOperands(operandesString,2);
 		    
 		    Register rd = Register.getRegister(operandesTab[0].trim());
 		    String imm8 = operandesTab[1].trim();
@@ -111,11 +99,7 @@ public class InstructionFactory {
 	
 	public static Instruction buildInstCatB(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
-		String [] operandesTab = operandesString.split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
-		    
-		    if (operandesTab.length != 2) {
-				throw new AssemblerException("Syntax Error : Bad number of operandes" , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
-			}
+		String [] operandesTab = processOperands(operandesString,2);
 		    
 		    Register regPos0 = Register.getRegister(operandesTab[0].trim());
 		    Register regPos1 = Register.getRegister(operandesTab[1].trim());
@@ -124,6 +108,32 @@ public class InstructionFactory {
 		    
 		    return new InstrCategorieB(concreteOperation, regPos0, regPos1);
 		      
+	}
+	
+	
+	public static Instruction buildInstCatC(InstructionLabel iLabel, String operandesString) throws AssemblerException{
+		
+		String [] operandesTab = processOperands(operandesString,2);
+		    
+		    Register rd = Register.getRegister(operandesTab[0].trim());
+		    String imm8 = operandesTab[1].trim();
+		   
+		    InstructionLabel concreteOperation = iLabel;
+		    
+		    return new InstrCategorieC(concreteOperation, rd, imm8);
+		   	    
+	}
+	
+	
+	private static String [] processOperands(String opString, int NbOprandsRequired ) throws AssemblerException{
+		
+		String [] opTab = opString.split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
+	    
+	    if (opTab.length != NbOprandsRequired) {
+			throw new AssemblerException("Syntax Error : Bad number of operandes" , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		}
+	    return opTab;
+		
 	}
 	
 }

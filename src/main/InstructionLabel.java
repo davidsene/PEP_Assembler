@@ -29,8 +29,12 @@ public enum InstructionLabel {
 	//B3
 	RSB("1001",Categorie.B),
 	MVN("1111",Categorie.B),
-	//
-	MUL("1101",Categorie.B);
+	//B
+	MUL("1101",Categorie.B),
+	
+	//C
+	LDR("1",Categorie.C),
+	STR("0",Categorie.C);
 	
 	private String codeOp;
 	
@@ -79,6 +83,8 @@ public enum InstructionLabel {
 			case "MUL": return MUL;
 			case "BIC": return BIC;
 			case "MVN": return MVN;
+			case "LDR": return LDR;
+			case "STR": return STR;
 			
 			
 			default:

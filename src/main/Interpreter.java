@@ -1,15 +1,18 @@
 package main;
 
+import java.util.List;
 
 import main.instructionUtils.Instruction;
-import main.instructionUtils.InstructionFactory;
+import main.instructionUtils.InstructionManager;
 
 
 public class Interpreter {
 
+	private InstructionManager instructionManager;
 	
-	
-	public Interpreter() {}
+	public Interpreter() {
+		this.instructionManager = new InstructionManager();
+	}
 
 	
 	public void translate(AssemblerProgram program) throws AssemblerException {
@@ -21,9 +24,7 @@ public class Interpreter {
 			while (line != null && ! line.trim().isEmpty()) {
 				
 				try {
-					
-					Instruction instruction = InstructionFactory.getInstruction(line);
-					System.out.println(instruction.toHexCode());
+					this.instructionManager.processLine(line);
 				} 
 				catch (AssemblerException e) {
 					
@@ -33,6 +34,13 @@ public class Interpreter {
 				line = program.getNextLine();
 				instrPtr++;
 				
+			}
+			
+			
+			List<Instruction> rom = instructionManager.getTheROM();
+			
+			for (Instruction instruction : rom) {
+				System.out.println(instruction.toHexCode());
 			}
 			
 	}

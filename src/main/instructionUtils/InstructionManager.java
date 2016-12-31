@@ -7,36 +7,49 @@ import main.Variable;
 
 public class InstructionManager {
 	
+	private DirectivesInterpreter dInterpreter;
+	
+	private InstructionFactory iFactory;
 	
 	private List<Instruction> romInstrList;
 	
 	private List<Variable> ramVariablesList;
 	
-	private boolean recordingOnRam;
+	public int programState;
 	
-	private boolean recordingOnRom;
 	
 
 	public InstructionManager() {
 		this.romInstrList = new ArrayList<>();
 		this.ramVariablesList = new ArrayList<>();
-		this.recordingOnRam=false;
-		this.recordingOnRom=true;
+		this.programState=0;
+		this.dInterpreter = new DirectivesInterpreter();
+		this.iFactory = new InstructionFactory(ramVariablesList);
 	}
 	
 
 	public void processLine(String line) throws AssemblerException{
 		
-		if(this.recordingOnRom){
-			this.romInstrList.add(InstructionFactory.getInstruction(line));
+		if(line.trim().startsWith(DirectivesInterpreter.DIRECTIVES_PREFIX)){
+			this.programState=this.dInterpreter.interpreteDirective(line);
 			return;
 		}
 		
-		if(this.recordingOnRam){
+		if(this.recordingOnRom()){
+			this.romInstrList.add(iFactory.getInstruction(line));
+			return;
+		}
+		
+		if(this.recordingOnRam()){
 			Variable variable = VariableFactory.createVariable(line);
 			this.addVariableToRam(variable);
 			return;
 		}
+		
+		
+		
+		throw new AssemblerException("Syntax Error : Instruction Used Out of Block", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		
 		
 	}
 	
@@ -64,7 +77,7 @@ public class InstructionManager {
 		
 		}
 		else
-		   throw new AssemblerException("Duplicated declaration Variable[ "+ variable.getNom() +"] . Aborting",AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		   throw new AssemblerException("Duplicated variable declaration '"+ variable.getNom() +"' ",AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
 	}
 	
 	
@@ -77,6 +90,14 @@ public class InstructionManager {
 	
 	public List<Variable> getTheRAM(){
 		return this.ramVariablesList;
+	}
+	
+	private Boolean recordingOnRom() {
+		return this.programState==2;
+	}
+	
+	private Boolean recordingOnRam() {
+		return this.programState==1;
 	}
 	
 }

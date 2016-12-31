@@ -1,5 +1,7 @@
 package main;
 
+import main.instructionUtils.Instruction;
+
 public class Variable {
 	
 	private String nom;
@@ -8,12 +10,17 @@ public class Variable {
 	
 	private Type type;
 	
+	private int initialValue;
 	
-	public Variable(String nom, int adress, Type type) {
+	
+	public Variable(String nom, int adress, Type type, int initialValue) {
 		this.setNom(nom);
 		this.setAdress(adress);
 		this.setType(type);
+		this.setInitialValue(initialValue);
 	}
+	
+
 	
 
 	public String getNom() {
@@ -21,6 +28,8 @@ public class Variable {
 	}
 
 	public void setNom(String nom) {
+		if(nom==null)
+			throw new RuntimeException("Trying to Set a null value as variable name");
 		this.nom = nom;
 	}
 
@@ -28,8 +37,9 @@ public class Variable {
 		return adress;
 	}
 	
-	public String getAdressAsBinaryString() {
-		return "";
+	public String getAdressAsImm8() {
+		String adress =  "#"+this.adress;
+		return adress;
 	}
 
 	public void setAdress(int adress) {
@@ -41,8 +51,32 @@ public class Variable {
 	}
 
 	public void setType(Type type) {
+		if(type==null)
+			throw new RuntimeException("Trying to Set a null value as variable Type");
 		this.type = type;
 	}
+
+	
+	public int getInitialValue() {
+		return initialValue;
+	}
+
+
+	public void setInitialValue(int initialValue) {
+		this.initialValue = initialValue;
+	}
+
+
+
+
+	@Override
+	public String toString() {
+		return "Variable [nom=" + nom + ", adress=" + adress + ", type=" + type + ", initialValue=" + initialValue
+				+ "]";
+	}
+
+
+	
 
 	
 

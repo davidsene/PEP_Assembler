@@ -1,16 +1,26 @@
 package main.instructionUtils;
 
 
+import java.util.List;
+
 import main.AssemblerException;
 import main.InstructionLabel;
 import main.Register;
+import main.Variable;
 
 
 public class InstructionFactory {
 	
+	private List<Variable> variablesList;
+	
+	public InstructionFactory(List<Variable> varList) {
+		this.variablesList = varList;
+		
+	}
 	
 	
-	public static Instruction getInstruction(String line) throws AssemblerException {
+	
+	public  Instruction getInstruction(String line) throws AssemblerException {
 		
 		String lineToProcess = line.trim();
 		
@@ -54,7 +64,7 @@ public class InstructionFactory {
 	
 	
 	
-	public static Instruction buildInstCatA1(InstructionLabel iLabel, String operandesString) throws AssemblerException{
+	public  Instruction buildInstCatA1(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
 		String [] operandesTab = processOperands(operandesString,3);
 		    
@@ -69,7 +79,7 @@ public class InstructionFactory {
 	
 	
 	
-	public static Instruction buildInstCatA2(InstructionLabel iLabel, String operandesString) throws AssemblerException{
+	public Instruction buildInstCatA2(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
 		String [] operandesTab = processOperands(operandesString,3);
 		    
@@ -83,7 +93,7 @@ public class InstructionFactory {
 	}
 	
 	
-	public static Instruction buildInstCatA3(InstructionLabel iLabel, String operandesString) throws AssemblerException{
+	public  Instruction buildInstCatA3(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
 		String [] operandesTab = processOperands(operandesString,2);
 		    
@@ -97,7 +107,7 @@ public class InstructionFactory {
 	}
 	
 	
-	public static Instruction buildInstCatB(InstructionLabel iLabel, String operandesString) throws AssemblerException{
+	public Instruction buildInstCatB(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
 		String [] operandesTab = processOperands(operandesString,2);
 		    
@@ -111,12 +121,32 @@ public class InstructionFactory {
 	}
 	
 	
-	public static Instruction buildInstCatC(InstructionLabel iLabel, String operandesString) throws AssemblerException{
+	public  Instruction buildInstCatC(InstructionLabel iLabel, String operandesString) throws AssemblerException{
 		
 		String [] operandesTab = processOperands(operandesString,2);
 		    
 		    Register rd = Register.getRegister(operandesTab[0].trim());
-		    String imm8 = operandesTab[1].trim();
+		    
+		    String secondOperand = operandesTab[1].trim();
+		    
+		    String imm8;
+		    
+		    if(secondOperand.startsWith("#")){
+		    	imm8 = secondOperand;
+		    }
+		    else{
+		    	
+		    	Variable variable = this.getVariableFromRam(secondOperand);
+		    	
+		    	if(variable==null){
+		    		throw new AssemblerException("Syntax Error : Using a undeclared variable ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		    	}
+		    	else{
+		    		imm8 = variable.getAdressAsImm8();
+		    	}
+		    }
+		
+		   
 		   
 		    InstructionLabel concreteOperation = iLabel;
 		    
@@ -125,7 +155,8 @@ public class InstructionFactory {
 	}
 	
 	
-	private static String [] processOperands(String opString, int NbOprandsRequired ) throws AssemblerException{
+	
+	private String [] processOperands(String opString, int NbOprandsRequired ) throws AssemblerException{
 		
 		String [] opTab = opString.split(String.valueOf(Instruction.MULTI_OPER_SEPARATOR));
 	    
@@ -134,6 +165,18 @@ public class InstructionFactory {
 		}
 	    return opTab;
 		
+	}
+	
+	
+	private Variable getVariableFromRam(String nom){
+		
+		if(nom==null || nom.isEmpty()) return null;
+		
+		for (int i = 0; i < variablesList.size(); i++) {
+			if ( variablesList.get(i).getNom().compareTo(nom) == 0 ) return variablesList.get(i);
+		}
+		
+		return null;
 	}
 	
 }

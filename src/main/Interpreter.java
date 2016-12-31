@@ -1,7 +1,6 @@
 package main;
 
 import java.util.List;
-
 import main.instructionUtils.Instruction;
 import main.instructionUtils.InstructionManager;
 
@@ -36,13 +35,27 @@ public class Interpreter {
 				
 			}
 			
-			
 			List<Instruction> rom = instructionManager.getTheROM();
+			List<Variable> ram = instructionManager.getTheRAM();
 			
-			for (Instruction instruction : rom) {
-				System.out.println(instruction.toHexCode());
-			}
+			FileManager fileManager = new FileManager();
 			
+			fileManager.createROMFileFromList(rom, "rom", "ini");
+			fileManager.createRAMFileFromList(ram, "ram", "ini");
+			fileManager.CreateProgramMemoryMap(ram, "map", "ini");
+			
+			
+			
+			//for (Instruction instruction : rom) {
+				//System.out.println(instruction.toHexCode());
+			//}
+			//System.out.println("======THE RAM=======");
+			
+			
+			//for (Variable variable : ram) {
+				//System.out.println(variable.toString());
+			//}
+			//System.out.println("======THE ROM=======");
 	}
 	
 }

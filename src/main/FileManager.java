@@ -56,7 +56,7 @@ public class FileManager {
 		appendInNewFile("v2.0 raw","\n",fileWriter);
 		
 		for (Variable variable : list) {
-			appendInNewFile(String.valueOf(variable.getInitialValue())," ",fileWriter);
+			appendInNewFile(String.valueOf(Integer.toHexString(variable.getInitialValue()))," ",fileWriter);
 		}
 		
 		closeNewFile(fileWriter);

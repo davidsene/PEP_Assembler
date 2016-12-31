@@ -20,14 +20,16 @@ public class Interpreter {
 			String  line = program.getNextLine();
 			int instrPtr= 1;
 	
-			while (line != null && ! line.trim().isEmpty()) {
+			while (line != null) {
 				
-				try {
-					this.instructionManager.processLine(line);
-				} 
-				catch (AssemblerException e) {
-					
-					throw new AssemblerException(e.getMessage().concat(" [ On line : " + instrPtr +" ]" ), e.getErrorCode());
+				if( ! line.trim().isEmpty()){
+					try {
+						this.instructionManager.processLine(line);
+					} 
+					catch (AssemblerException e) {
+						
+						throw new AssemblerException(e.getMessage().concat(" [ On line : " + instrPtr +" ]" ), e.getErrorCode());
+					}
 				}
 				
 				line = program.getNextLine();

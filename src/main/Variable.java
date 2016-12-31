@@ -1,7 +1,5 @@
 package main;
 
-import main.instructionUtils.Instruction;
-
 public class Variable {
 	
 	private String nom;

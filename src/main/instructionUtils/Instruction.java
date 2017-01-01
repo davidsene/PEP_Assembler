@@ -97,7 +97,6 @@ public abstract class Instruction {
 	
 	
 	public static String normaliseTo_N_Bits(String word, int nbBits){
-		
 		if ( word == null || word.length()> nbBits || nbBits>16)
 			throw new RuntimeException("Normalizing Error");
 		

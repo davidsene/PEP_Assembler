@@ -49,9 +49,14 @@ public class TestOperationsCategorieA {
 	@Test
 	public void InstructionCategorieA3test() throws AssemblerException {
 		
-		Instruction instruction = new InstrCategorieA3(InstructionLabel.MOV, Register.R6, "#250");
 		
-		Assert.assertEquals("26fa", instruction.toHexCode());
+		Instruction instruction = new InstrCategorieA3(InstructionLabel.MOV, Register.R6, "#16");
+		Instruction instruction1 = new InstrCategorieA3(InstructionLabel.MOV, Register.R7, "#-22");
+		Instruction instruction3 = new InstrCategorieA3(InstructionLabel.MOV, Register.R7, "#0");
+		
+		Assert.assertEquals("2700", instruction3.toHexCode());
+		Assert.assertEquals("27ea", instruction1.toHexCode());
+		Assert.assertEquals("2610", instruction.toHexCode());
 		
 	}
 

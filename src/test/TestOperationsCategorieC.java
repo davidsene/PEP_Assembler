@@ -21,11 +21,10 @@ public class TestOperationsCategorieC {
 		Variable variable = new Variable("test", 2, Type.WORD, 2);
 		Instruction instruction11 = new InstrCategorieC(InstructionLabel.LDR, Register.R6, variable.getAdressAsImm8());
 		Instruction instruction2 = new InstrCategorieC(InstructionLabel.STR, Register.R7, "#23");
-		System.out.println(variable.getAdressAsImm8());
 		Assert.assertEquals("9ee8", instruction1.toHexCode());
 		Assert.assertEquals("9e02", instruction11.toHexCode());
 		Assert.assertEquals("9717", instruction2.toHexCode());
-		
+		System.out.println(String.valueOf((short)Integer.parseInt("ffff",16)));
 	}
 
 }

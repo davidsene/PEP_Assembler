@@ -32,12 +32,16 @@ public class InstrCategorieA3 extends Instruction {
 		
 		try {
 			
-			int val = Integer.parseUnsignedInt(imm8.substring(1));
 			
-			if (val>255 ) 
+			int val = Integer.parseInt(imm8.substring(1),10);
+			
+			if (val>127 || val<-128 ) 
 				throw new AssemblerException("Syntax Error : Imm8 value Out of Bound ", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
 			 
-			this.imm8 = Instruction.normaliseTo_N_Bits(Integer.toBinaryString(val),8);
+			String Imm8BinaryOnNededNumberOfBits = Integer.toBinaryString(val);
+			Imm8BinaryOnNededNumberOfBits= "00000000"+Imm8BinaryOnNededNumberOfBits;
+			String ImmBinaryValueOn8Bits = Imm8BinaryOnNededNumberOfBits.substring(Imm8BinaryOnNededNumberOfBits.length()-8,Imm8BinaryOnNededNumberOfBits.length());
+			this.imm8 = Instruction.normaliseTo_N_Bits(ImmBinaryValueOn8Bits,8);
 			
 		} 
 		catch (NumberFormatException e) {

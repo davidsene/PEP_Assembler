@@ -7,9 +7,9 @@ import org.junit.Test;
 import main.AssemblerException;
 import main.InstructionLabel;
 import main.Register;
-import main.Type;
-import main.Variable;
 import main.instructionUtils.*;
+import main.variableUtils.Type;
+import main.variableUtils.Variable;
 
 public class TestOperationsCategorieC {
 	

@@ -1,58 +1,52 @@
 package main.instructionUtils;
 
 import main.AssemblerException;
-import main.BranchingCondition;
 import main.Categorie;
 import main.InstructionLabel;
+import main.instructionUtils.label.Label;
 
 public class InstrCategorieD extends Instruction {
 	
-	private String imm8;
+	private Label label;
 	
-	private BranchingCondition branchingCondition;
+	private String labProvName;
+	
+	private int lineNumber; //A little help for debuging
 	
 
-	public InstrCategorieD(InstructionLabel concreteOperation, BranchingCondition bCondition , String imm8) throws AssemblerException {
-		super(Categorie.A3,concreteOperation);
-		this.setImm8(imm8);
-		this.setBranchingCondition(bCondition);
-	
+	public InstrCategorieD(InstructionLabel concreteOperation,String lpName) throws AssemblerException {
+		super(Categorie.D,concreteOperation);
+		this.setLabProvName(lpName);
 	}
 
 	
-	private void setImm8(String imm8) throws AssemblerException {
+
+	public void setLabel(Label lab) {
 		
-		if (imm8 == null ) {
-			 throw new RuntimeException("Trying to Set a null value for imm8");
+		if (lab == null) {
+			throw new RuntimeException("trying to set null value for label");
 		}
-		
-		if( ! imm8.trim().startsWith("#") )
-			throw new AssemblerException("Syntax Error : Bad Imm8 Syntax : Not Starting with '#' ", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
-		
-		try {
-			
-			int val = Integer.parseUnsignedInt(imm8.substring(1),10);
-			
-			if (val>255 ) 
-				throw new AssemblerException("Syntax Error : Imm8 value Out of Bound ", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
-			 
-			this.imm8 = Instruction.normaliseTo_N_Bits(Integer.toBinaryString(val),8);
-			
-		} 
-		catch (NumberFormatException e) {
-			
-			 throw new AssemblerException("Syntax Error : Bad Imm8 value Format ", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
-		}
-	
+	    this.label = lab;
+     }
+
+
+
+	public String getLabProvName() {
+		return labProvName;
 	}
-	
-	
-	
-	public void setBranchingCondition(BranchingCondition branchingCondition) {
-		if (branchingCondition== null ) {
-			 throw new RuntimeException("Trying to Set a null value for branchingCondition");
+
+
+
+	public void setLabProvName(String lpn) throws AssemblerException {
+		
+		if ( lpn == null) {
+			throw new RuntimeException("trying to set null value for label provisory name");
 		}
-		this.branchingCondition = branchingCondition;
+		
+		if(lpn.isEmpty())
+			throw new AssemblerException("Syntax Error : A label branching name in a branchement can't be empty ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		
+		this.labProvName = lpn;
 	}
 
 
@@ -61,11 +55,34 @@ public class InstrCategorieD extends Instruction {
 		String binaryCode =  new StringBuilder()
 	             .append(this.getCategorie().getCode())
 	             .append(this.getConcreteOperation().getCodeOp())
-	             .append(this.branchingCondition.getCodeOpCond())
-	             .append(this.imm8)
+	             .append(this.label.getAdressAsBinaryString())
 	             .toString();
         this.setBinaryStringCode(binaryCode);
 		
 	}
+
+
+
+	public int getLineNumber() {
+		return lineNumber;
+	}
+
+
+
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "InstrCategorieD [label=" + label + ", labProvName=" + labProvName + ", lineNumber=" + lineNumber + "]";
+	}
+
+
+
+	
+	
 
 }

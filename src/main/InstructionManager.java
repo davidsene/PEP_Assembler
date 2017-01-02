@@ -1,9 +1,15 @@
-package main.instructionUtils;
+package main;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.AssemblerException;
-import main.Variable;
+
+import main.directive.DirectivesInterpreter;
+import main.instructionUtils.InstrCategorieD;
+import main.instructionUtils.Instruction;
+import main.instructionUtils.InstructionFactory;
+import main.instructionUtils.label.Label;
+import main.variableUtils.Variable;
+import main.variableUtils.VariableFactory;
 
 public class InstructionManager {
 	
@@ -24,11 +30,11 @@ public class InstructionManager {
 		this.ramVariablesList = new ArrayList<>();
 		this.programState=0;
 		this.dInterpreter = new DirectivesInterpreter();
-		this.iFactory = new InstructionFactory(ramVariablesList);
+		this.iFactory = new InstructionFactory(ramVariablesList,this.romInstrList);
 	}
 	
 
-	public void processLine(String line) throws AssemblerException{
+	public void processLine(String line,int lineNumber) throws AssemblerException{
 		
 		if(line.trim().startsWith(DirectivesInterpreter.DIRECTIVES_PREFIX)){
 			this.programState=this.dInterpreter.interpreteDirective(line);
@@ -36,7 +42,10 @@ public class InstructionManager {
 		}
 		
 		if(this.recordingOnRom()){
-			this.romInstrList.add(iFactory.getInstruction(line));
+			Instruction inst = iFactory.getInstruction(line,lineNumber);
+			if(! (inst instanceof Label)){
+				this.romInstrList.add(inst);
+			}
 			return;
 		}
 		
@@ -98,6 +107,30 @@ public class InstructionManager {
 	
 	private Boolean recordingOnRam() {
 		return this.programState==1;
+	}
+	
+	
+	public void linkLabelsWithBranchements() throws AssemblerException{
+		 
+		List<Instruction> newRomList = new ArrayList<>();
+		
+		for (Instruction instruction : romInstrList) {
+			
+			if (instruction instanceof InstrCategorieD) {
+				InstrCategorieD branch = (InstrCategorieD) instruction;
+				Label label = this.iFactory.labelFactory.getLabelFromName(branch.getLabProvName());
+				
+				if (label == null) {
+					throw new AssemblerException("Syntax Error : Reference to an Undeclared label [On Line "+branch.getLineNumber()+"]",AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+				}
+				branch.setLabel(label);
+				newRomList.add(branch);
+			}
+			else if (! (instruction  instanceof Label)){
+				newRomList.add(instruction);
+			}
+		}
+		this.romInstrList = newRomList;
 	}
 	
 }

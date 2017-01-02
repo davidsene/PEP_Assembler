@@ -1,9 +1,7 @@
-package main.instructionUtils;
+package main.variableUtils;
 
 
 import main.AssemblerException;
-import main.Type;
-import main.Variable;
 
 
 public class VariableFactory {

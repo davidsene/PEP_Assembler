@@ -2,12 +2,14 @@ package main;
 
 import java.util.List;
 import main.instructionUtils.Instruction;
-import main.instructionUtils.InstructionManager;
+import main.variableUtils.Variable;
 
 
 public class Interpreter {
 
 	private InstructionManager instructionManager;
+	
+	private static final String COMMENT_PREFIX=";";
 	
 	public Interpreter() {
 		this.instructionManager = new InstructionManager();
@@ -22,9 +24,9 @@ public class Interpreter {
 	
 			while (line != null) {
 				
-				if( ! line.trim().isEmpty()){
+				if( ! line.trim().isEmpty() && ! line.trim().startsWith(Interpreter.COMMENT_PREFIX)){
 					try {
-						this.instructionManager.processLine(line);
+						this.instructionManager.processLine(line,instrPtr);
 					} 
 					catch (AssemblerException e) {
 						
@@ -37,8 +39,13 @@ public class Interpreter {
 				
 			}
 			
+			
+			this.instructionManager.linkLabelsWithBranchements();
+			
 			List<Instruction> rom = instructionManager.getTheROM();
+			
 			List<Variable> ram = instructionManager.getTheRAM();
+			
 			
 			FileManager fileManager = new FileManager();
 			
@@ -48,16 +55,7 @@ public class Interpreter {
 			
 			
 			
-			//for (Instruction instruction : rom) {
-				//System.out.println(instruction.toHexCode());
-			//}
-			//System.out.println("======THE RAM=======");
 			
-			
-			//for (Variable variable : ram) {
-				//System.out.println(variable.toString());
-			//}
-			//System.out.println("======THE ROM=======");
 	}
 	
 }

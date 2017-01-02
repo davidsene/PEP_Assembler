@@ -2,25 +2,28 @@ package main.instructionUtils;
 
 
 import java.util.List;
-
 import main.AssemblerException;
 import main.InstructionLabel;
 import main.Register;
-import main.Variable;
-
+import main.instructionUtils.label.LabelFactory;
+import main.variableUtils.Variable;
 
 public class InstructionFactory {
 	
 	private List<Variable> variablesList;
+	private List<Instruction> instructionsList;
+	public LabelFactory labelFactory;
 	
-	public InstructionFactory(List<Variable> varList) {
+	public InstructionFactory(List<Variable> varList,List<Instruction> instrList) {
 		this.variablesList = varList;
+		this.instructionsList = instrList;
+		this.labelFactory = new LabelFactory();
 		
 	}
 	
 	
 	
-	public  Instruction getInstruction(String line) throws AssemblerException {
+	public  Instruction getInstruction(String line,int lineNumber) throws AssemblerException {
 		
 		String lineToProcess = line.trim();
 		
@@ -32,9 +35,18 @@ public class InstructionFactory {
 			
 			if(iLab == null)
 				throw new AssemblerException("Syntax Error : No separator between operation and operands OR bad operation syntax ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
-			else 
-				throw new AssemblerException("Syntax Error : Missing Operand ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+			
+			else {
+				
+				if(iLab==InstructionLabel.LABEL){
+					  return this.labelFactory.buildLabel(lineToProcess,"",this.instructionsList.size());
+				} 
+					
+				else{ 
 		
+					throw new AssemblerException("Syntax Error : Missing Operand ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+				}
+			}
 		}
 			
 		
@@ -55,9 +67,11 @@ public class InstructionFactory {
 			case A3: return buildInstCatA3(iLabel, operandesString);
 			case B: return buildInstCatB(iLabel, operandesString);
 			case C: return buildInstCatC(iLabel, operandesString);
+			case LABEL: return this.labelFactory.buildLabel(instrWord,operandesString,this.instructionsList.size());
+			case D: return buildInstCatD(iLabel, operandesString,lineNumber);
 
 		default:
-			return null;
+			throw new RuntimeException("Unknow Instruction categorie");
 		}	
 	}
 	
@@ -99,7 +113,6 @@ public class InstructionFactory {
 		    
 		    Register rd = Register.getRegister(operandesTab[0].trim());
 		    String imm8 = operandesTab[1].trim();
-		   
 		    InstructionLabel concreteOperation = iLabel;
 		    
 		    return new InstrCategorieA3(concreteOperation, rd, imm8);
@@ -146,13 +159,53 @@ public class InstructionFactory {
 		    	}
 		    }
 		
-		   
-		   
+		    
 		    InstructionLabel concreteOperation = iLabel;
 		    
 		    return new InstrCategorieC(concreteOperation, rd, imm8);
 		   	    
 	}
+	
+	
+	public  Instruction buildInstCatD(InstructionLabel iLabel, String operandesString,int lineNumber) throws AssemblerException{
+		
+		String [] opTab = operandesString.trim().split("\\s+");
+	    
+	    if (opTab.length != 1) {
+			throw new AssemblerException("Syntax Error : Bad number of operandes" , AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+		}
+		    
+		    InstructionLabel concreteOperation = iLabel;
+		    
+		    InstrCategorieD ins = new InstrCategorieD(concreteOperation,opTab[0].trim());
+		    
+		    ins.setLineNumber(lineNumber);
+		    
+		    return  ins;
+		   	    
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -168,6 +221,7 @@ public class InstructionFactory {
 	}
 	
 	
+	
 	private Variable getVariableFromRam(String nom){
 		
 		if(nom==null || nom.isEmpty()) return null;
@@ -178,5 +232,7 @@ public class InstructionFactory {
 		
 		return null;
 	}
+	
+	
 	
 }

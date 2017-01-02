@@ -1,4 +1,4 @@
-package main.instructionUtils;
+package main.directive;
 
 import main.AssemblerException;
 

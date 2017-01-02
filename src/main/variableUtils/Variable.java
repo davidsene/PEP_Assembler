@@ -1,4 +1,4 @@
-package main;
+package main.variableUtils;
 
 public class Variable {
 	

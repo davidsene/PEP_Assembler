@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import main.instructionUtils.Instruction;
+import main.variableUtils.Variable;
 
 
 public class FileManager {

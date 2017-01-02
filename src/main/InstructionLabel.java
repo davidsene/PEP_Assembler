@@ -34,7 +34,18 @@ public enum InstructionLabel {
 	
 	//C
 	LDR("1",Categorie.C),
-	STR("0",Categorie.C);
+	STR("0",Categorie.C),
+	
+	//D
+	BE("0000",Categorie.D),
+	BNE("0001",Categorie.D),
+	B("1110",Categorie.D),
+	MI("0100",Categorie.D),
+	PL("0101",Categorie.D),
+	
+	//LABEL
+	
+	LABEL("",Categorie.LABEL);
 	
 	private String codeOp;
 	
@@ -85,9 +96,14 @@ public enum InstructionLabel {
 			case "MVN": return MVN;
 			case "LDR": return LDR;
 			case "STR": return STR;
-			
+			case "BE": return BE;
+			case "BNE": return BNE;
+			case "B": return B;
+			case "BMI": return MI;
+			case "BPL": return PL;
 			
 			default:
+				if(label.endsWith(":")) return LABEL;
 				return null;
 			}	
 	}

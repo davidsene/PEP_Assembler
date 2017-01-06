@@ -4,17 +4,17 @@ package test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import main.AssemblerException;
-import main.InstructionLabel;
+import main.exception.AssemblerException;
 import main.instructionUtils.*;
 import main.instructionUtils.label.Label;
+import main.syntaxe.InstructionLabel;
 
 
 public class TestOperationsCategorieD {
 	
 	
 	@Test
-	public void InstructionCategorieCtest() throws AssemblerException {
+	public void InstructionCategorieDtest() throws AssemblerException {
 		
 		Label label1 = new Label("dav",5);
 		Label label2 = new Label("dav",255);
@@ -26,11 +26,10 @@ public class TestOperationsCategorieD {
 		instruction2.setLabel(label2);
 		InstrCategorieD instruction3 = new InstrCategorieD(InstructionLabel.B, label3.getName());
 		instruction3.setLabel(label3);
-		//1101 0000 0000 0101
 		
 		Assert.assertEquals("d005", instruction1.toHexCode());
 		Assert.assertEquals("d1ff", instruction2.toHexCode());
-		Assert.assertEquals("df00", instruction3.toHexCode());
+		Assert.assertEquals("de00", instruction3.toHexCode());
 	}
 
 }

@@ -1,16 +1,34 @@
 package main.instructionUtils.label;
 
-import main.AssemblerException;
-import main.Categorie;
-import main.InstructionLabel;
+import main.exception.AssemblerException;
 import main.instructionUtils.Instruction;
+import main.syntaxe.Categorie;
+import main.syntaxe.InstructionLabel;
 
 public class Label extends Instruction {
 	
+	
+	/**
+	 * The label name
+	 */
 	private String name;
 	
+	
+	
+	/**
+	 * The address of the label
+	 */
 	private int adress;
 		
+	
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param adress
+	 * @throws AssemblerException
+	 */
 	public Label(String name, int adress) throws AssemblerException{
 		super(Categorie.LABEL, InstructionLabel.LABEL);
 		this.setName(name);
@@ -18,11 +36,22 @@ public class Label extends Instruction {
 	}
 
 
+	
+	/**
+	 * @return The label's name
+	 */
 	public String getName() {
 		return name;
 	}
 
 
+	
+	/**
+	 * Set the label's name
+	 * 
+	 * @param name
+	 * @throws AssemblerException
+	 */
 	public void setName(String name) throws AssemblerException {
 		if (name == null ) {
 			throw new RuntimeException("Trying to Set a null value label name ");
@@ -30,30 +59,44 @@ public class Label extends Instruction {
 		
 		if(name.isEmpty()){
 			
-			throw new AssemblerException("Syntax Error : Label Name can't be empty ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+			throw new AssemblerException("Syntax Error : Label Name can't be empty ", AssemblerException.ERR_ASM_RUNTIME_FAILED);
 		}
 		
 		if(name.contains(":")){
 			
-			throw new AssemblerException("Syntax Error : Label Name can't contains the character ':' ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED);
+			throw new AssemblerException("Syntax Error : Label Name can't contains the character ':' ", AssemblerException.ERR_ASM_RUNTIME_FAILED);
 		}
-		
 		
 		this.name = name;
 	}
 
 
+	
+	/**
+	 * @return The label's address
+	 */
 	public int getAdress() {
 		return adress;
 	}
 
 
+	
+	/**
+	 * Set the label's address
+	 * 
+	 * @param adress
+	 */
 	public void setAdress(int adress) {
 		if(adress<0 || adress>255)
 			throw new RuntimeException("Label adress out of bound ");
 		this.adress = adress;
 	}
 
+	
+	
+	/**
+	 * @return The binary normalized string representation of the label's address
+	 */
 	public String getAdressAsBinaryString(){
 		String addr = Integer.toBinaryString(this.adress);
 		addr = Instruction.normaliseTo_N_Bits(addr, 8);
@@ -62,21 +105,12 @@ public class Label extends Instruction {
 
 	
 
-
-	@Override
-	public String toString() {
-		return "Label [name=" + name + ", adress=" + adress + ", BinAddr="+ this.getAdressAsBinaryString()+"]";
-	}
-
-
+	/* (non-Javadoc)
+	 * @see main.instructionUtils.Instruction#BuildBinaryStringcode()
+	 */
 	@Override
 	public void BuildBinaryStringcode() {
 		return;
 	}
 	
-	
-	
-
-	
-
 }

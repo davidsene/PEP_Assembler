@@ -8,7 +8,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.LineIterator;
 
+import main.exception.AssemblerException;
+
 public class AssemblerProgram  {
+	
 	
 	/**
 	 * the program file name
@@ -23,6 +26,7 @@ public class AssemblerProgram  {
 		return this.filename;
 	}
 
+	
 	/**
 	 * line by line reader
 	 */
@@ -36,7 +40,7 @@ public class AssemblerProgram  {
 	public AssemblerProgram(String filePath) throws AssemblerException {
 		
 		if (filePath == null || filePath.isEmpty()) {
-			throw new AssemblerException("filename attribute is empty.", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new AssemblerException("filename attribute is empty.", AssemblerException.ERR_LAUNCHER_ASM_PROGRAM_FAILED);
 		}
 		
 		filePath = FilenameUtils.normalize(filePath);
@@ -45,12 +49,12 @@ public class AssemblerProgram  {
 		File file = Paths.get( System.getProperty("user.dir") + System.getProperty("file.separator") + filePath ).normalize().toFile();
 
 		if (file == null) {
-			throw new AssemblerException("bad file.", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new AssemblerException("bad file.", AssemblerException.ERR_LAUNCHER_ASM_PROGRAM_FAILED);
 		}
 
 		
 		if (!file.exists() || !file.isFile()) {
-			throw new AssemblerException("'" + file.toPath() + "' does not exist. Working directory is set to '" + System.getProperty("user.dir") + "'", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new AssemblerException("'" + file.toPath() + "' does not exist. Working directory is set to '" + System.getProperty("user.dir") + "'", AssemblerException.ERR_LAUNCHER_ASM_PROGRAM_FAILED);
 		}
 		
 			
@@ -59,13 +63,16 @@ public class AssemblerProgram  {
 			this.filename = file.getName();
 		}
 		catch (IOException e) {
-			throw new  AssemblerException(e.getMessage(),  AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new  AssemblerException(e.getMessage(),  AssemblerException.ERR_LAUNCHER_ASM_PROGRAM_FAILED);
 		}
 	
 	}
 	
 
 	
+	/**
+	 * @return The next line in the current file or null if we arrive at the end of the file
+	 */
 	public String getNextLine(){
 			
 			try {

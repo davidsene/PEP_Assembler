@@ -4,10 +4,10 @@ package test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import main.AssemblerException;
-import main.InstructionLabel;
-import main.Register;
+import main.exception.AssemblerException;
 import main.instructionUtils.*;
+import main.syntaxe.InstructionLabel;
+import main.syntaxe.Register;
 
 public class TestOperationsCategorieB {
 	
@@ -50,6 +50,5 @@ public class TestOperationsCategorieB {
 		Assert.assertEquals("43f5", instruction16.toHexCode());
 		
 	}
-	
-	
+		
 }

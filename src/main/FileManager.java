@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
-
+import main.exception.AssemblerException;
 import main.instructionUtils.Instruction;
 import main.variableUtils.Variable;
 
@@ -12,6 +12,14 @@ import main.variableUtils.Variable;
 public class FileManager {
 	
 
+	/**
+	 * Create New File
+	 * 
+	 * @param filename The name of the file to create
+	 * @param extension  The extension of the file to create
+	 * @return A fileWriter for handling the created file
+	 * @throws AssemblerException
+	 */
 	private  FileWriter createNewFile(String filename,String extension) throws AssemblerException{
 		
 		FileWriter fileWriter;
@@ -19,7 +27,7 @@ public class FileManager {
 		try {
 				fileWriter = new FileWriter(Paths.get( System.getProperty("user.dir") + System.getProperty("file.separator") + filename).normalize().toFile());
 		} catch (IOException e) {
-				throw new AssemblerException("unable to create log file.", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+				throw new AssemblerException("unable to create log file.", AssemblerException.ERR_LAUNCHER_ASM_PROGRAM_FAILED);
 		}
 		
 		return fileWriter;
@@ -27,68 +35,107 @@ public class FileManager {
 	
 	
 	
-	private void appendInNewFile(String content, String spacer, FileWriter fileWriter) throws AssemblerException{
+	/**
+	 * Add content into a file
+	 * 
+	 * @param content
+	 * @param spacer
+	 * @param fileWriter
+	 * @throws AssemblerException
+	 */
+	private void appendInFile(String content, String spacer, FileWriter fileWriter) throws AssemblerException{
 		
 		try {
 			fileWriter.append(content + spacer);
 		} catch (IOException e) {
-			throw new AssemblerException("unable to append data to log file.", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new AssemblerException("unable to append data to log file.", AssemblerException.ERR_LAUNCHER_ASM_PROGRAM_FAILED);
 		}
 	}
 	
 	
 	
 
-	private void closeNewFile(FileWriter fileWriter) throws AssemblerException {
+	/**
+	 * Close a file
+	 * 
+	 * @param fileWriter
+	 * @throws AssemblerException
+	 */
+	private void closeFile(FileWriter fileWriter) throws AssemblerException {
 		try {
 			fileWriter.close();
 		} catch (IOException e) {
-			throw new AssemblerException("unable to release log file handle.", AssemblerException.ERR_LAUNCHER_BFCK_PROGRAM_FAILED);
+			throw new AssemblerException("unable to release log file handle.", AssemblerException.ERR_LAUNCHER_ASM_PROGRAM_FAILED);
 		}
 	}
 	
 	
 	
 	
-	
-	public void createRAMFileFromList(List<Variable> list , String filename, String fileExtension) throws AssemblerException{
+	/**
+	 * Create the Ram file
+	 * 
+	 * @param list
+	 * @param filename
+	 * @param fileExtension
+	 * @throws AssemblerException
+	 */
+	public void createRAMFile(List<Variable> list , String filename, String fileExtension) throws AssemblerException{
 		
 		FileWriter fileWriter= createNewFile(filename,fileExtension);
-		appendInNewFile("v2.0 raw","\n",fileWriter);
+		appendInFile("v2.0 raw","\n",fileWriter);
 		
 		for (Variable variable : list) {
-			appendInNewFile(String.valueOf(Integer.toHexString(variable.getInitialValue()))," ",fileWriter);
+			appendInFile(String.valueOf(Integer.toHexString(variable.getInitialValue()))," ",fileWriter);
 		}
 		
-		closeNewFile(fileWriter);
+		closeFile(fileWriter);
 	}
 	
 	
 	
-	public void createROMFileFromList(List<Instruction> list , String filename, String fileExtension) throws AssemblerException{
+	/**
+	 *  Create the Rom file
+	 * 
+	 * @param list
+	 * @param filename
+	 * @param fileExtension
+	 * @throws AssemblerException
+	 */
+	public void createROMFile(List<Instruction> list , String filename, String fileExtension) throws AssemblerException{
 		
-		FileWriter fileWriter= createNewFile(filename,fileExtension);
+		FileWriter fileWriter= createNewFile(filename,fileExtension+fileExtension);
 		
-		appendInNewFile("v2.0 raw","\n",fileWriter);
+		appendInFile("v2.0 raw","\n",fileWriter);
 		
 		for (Instruction instruction : list) {
-			appendInNewFile(String.valueOf(instruction.toHexCode()),"\n",fileWriter);
+			appendInFile(String.valueOf(instruction.toHexCode()),"\n",fileWriter);
 		}
 		
-		closeNewFile(fileWriter);
+		closeFile(fileWriter);
 	}
 	
 	
-	public void CreateProgramMemoryMap( List<Variable> list , String filename, String fileExtension) throws AssemblerException{
+	
+	
+	/**
+	 * Create the map file
+	 * 
+	 * @param list
+	 * @param filename
+	 * @param fileExtension
+	 * @throws AssemblerException
+	 */
+	public void createMemoryMap( List<Variable> list , String filename, String fileExtension) throws AssemblerException{
 		
 		FileWriter fileWriter= createNewFile(filename,fileExtension);
-		appendInNewFile("v2.0 raw","\n",fileWriter);
+		appendInFile("v2.0 raw","\n",fileWriter);
 		
 		for (Variable variable : list) {
-			appendInNewFile(String.valueOf(variable.getNom()+" "+ variable.getAdress()),"\n",fileWriter);
+			appendInFile(String.valueOf(variable.getNom()+" "+ variable.getAdress()),"\n",fileWriter);
 		}
 		
-		closeNewFile(fileWriter);
+		closeFile(fileWriter);
 	}
 	
 	

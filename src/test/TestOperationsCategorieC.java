@@ -4,10 +4,10 @@ package test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import main.AssemblerException;
-import main.InstructionLabel;
-import main.Register;
+import main.exception.AssemblerException;
 import main.instructionUtils.*;
+import main.syntaxe.InstructionLabel;
+import main.syntaxe.Register;
 import main.variableUtils.Type;
 import main.variableUtils.Variable;
 

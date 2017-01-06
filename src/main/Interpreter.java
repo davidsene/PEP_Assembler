@@ -1,22 +1,37 @@
 package main;
 
 import java.util.List;
+import main.exception.AssemblerException;
 import main.instructionUtils.Instruction;
+import main.syntaxe.Syntax;
 import main.variableUtils.Variable;
 
 
 public class Interpreter {
-
+	
+	
+	/**
+	 * The used instruction manager instance
+	 */
 	private InstructionManager instructionManager;
 	
-	private static final String COMMENT_PREFIX=";";
 	
+	
+	/**
+	 * Constructor
+	 */
 	public Interpreter() {
 		this.instructionManager = new InstructionManager();
 	}
 
 	
-	public void translate(AssemblerProgram program) throws AssemblerException {
+	/**
+	 * interprete the given program and generate files
+	 * 
+	 * @param program
+	 * @throws AssemblerException
+	 */
+	public void interprete(AssemblerProgram program) throws AssemblerException {
 		
 			// Fetch the next line
 			String  line = program.getNextLine();
@@ -24,7 +39,7 @@ public class Interpreter {
 	
 			while (line != null) {
 				
-				if( ! line.trim().isEmpty() && ! line.trim().startsWith(Interpreter.COMMENT_PREFIX)){
+				if( ! line.trim().isEmpty() && ! line.trim().startsWith(Syntax.COMMENT_PREFIX)){
 					try {
 						this.instructionManager.processLine(line,instrPtr);
 					} 
@@ -49,13 +64,12 @@ public class Interpreter {
 			
 			FileManager fileManager = new FileManager();
 			
-			fileManager.createROMFileFromList(rom, "rom", "ini");
-			fileManager.createRAMFileFromList(ram, "ram", "ini");
-			fileManager.CreateProgramMemoryMap(ram, "map", "ini");
+			String filename = program.getFilename().substring(0,program.getFilename().indexOf("."));
 			
-			
-			
-			
+			fileManager.createROMFile(rom, "rom_" + filename, "");
+			fileManager.createRAMFile(ram, "ram_"+ filename, "");
+			fileManager.createMemoryMap(ram, "map_"+ filename, "");
+				
 	}
 	
 }

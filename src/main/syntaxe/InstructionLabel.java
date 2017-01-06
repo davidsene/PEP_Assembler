@@ -1,17 +1,25 @@
-package main;
+package main.syntaxe;
 
+import main.exception.AssemblerException;
+
+/**
+ * Define the supported instructions and link them to a categorie
+ */
 public enum InstructionLabel {
 	
+	//Cat A1
 	LSLI("000",Categorie.A1),
 	LSRI("001",Categorie.A1),
 	ASRI("010",Categorie.A1),
 	
+	//Cat A2
 	ADD("01100",Categorie.A2), 
 	SUB("01101",Categorie.A2),
 	
+	//Cat A3
 	MOV("100",Categorie.A3),
 	
-	//B1
+	////Cat B
 	AND("0000",Categorie.B),
 	EOR("0001",Categorie.B),
 	LSL("0010",Categorie.B),
@@ -22,21 +30,18 @@ public enum InstructionLabel {
 	ROR("0111",Categorie.B),
 	ORR("1100",Categorie.B),
 	BIC("1110",Categorie.B),
-	//B2
 	TST("1000",Categorie.B),
 	CMP("1010",Categorie.B),
 	CMN("1011",Categorie.B),
-	//B3
 	RSB("1001",Categorie.B),
 	MVN("1111",Categorie.B),
-	//B
 	MUL("1101",Categorie.B),
 	
-	//C
+	//Cat C
 	LDR("1",Categorie.C),
 	STR("0",Categorie.C),
 	
-	//D
+	//Cat D
 	BE("0000",Categorie.D),
 	BNE("0001",Categorie.D),
 	B("1110",Categorie.D),
@@ -44,31 +49,54 @@ public enum InstructionLabel {
 	PL("0101",Categorie.D),
 	
 	//LABEL
-	
 	LABEL("",Categorie.LABEL);
 	
+	
+	/**
+	 * The String operation code
+	 */
 	private String codeOp;
 	
 	
+	/**
+	 * the associated categorie of an operation
+	 */
 	private Categorie categorie;
 	
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param codeOp
+	 * @param cat
+	 */
 	private InstructionLabel(String codeOp, Categorie cat){
 		this.codeOp = codeOp;
 		this.categorie=cat;
 	}
 	
 	
+	/**
+	 * @return Get the codeOp of an operation
+	 */
 	public String getCodeOp(){
 		return this.codeOp;
 	}
 	
 	
+	/**
+	 * @return Get the categorie of an operation
+	 */
 	public Categorie getCategorie() {
 		return categorie;
 	}
 
 	
+	/**
+	 * @param label
+	 * @return A operation object form a string code | null if the operation is not defined
+	 * @throws AssemblerException
+	 */
 	public static InstructionLabel  getInstructionLabel(String label) throws AssemblerException{
 		
 		switch (label) {
@@ -103,7 +131,7 @@ public enum InstructionLabel {
 			case "BPL": return PL;
 			
 			default:
-				if(label.endsWith(":")) return LABEL;
+				if(label.endsWith(Syntax.LABEL_DECLARATION_SUFFIX)) return LABEL;
 				return null;
 			}	
 	}

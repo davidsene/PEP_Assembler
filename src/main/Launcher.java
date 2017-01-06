@@ -8,6 +8,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import main.exception.AssemblerException;
+
 
 /**
  * Launcher
@@ -32,7 +34,7 @@ public class Launcher {
 		HelpFormatter formatter = new HelpFormatter();
 		CommandLine cmd;
 
-		options.addOption("p", true, "Assembler filename"); // the bfck program filename parameter, requires a parameter (true)
+		options.addOption("p", true, "The Assembler program filename"); 
 
 		/**
 		 * CLI Processing
@@ -42,7 +44,7 @@ public class Launcher {
 			cmd = parser.parse(options, args);
 		} catch (ParseException e) {
 			System.out.println(e.getMessage());
-			formatter.printHelp("./Ass", options);
+			formatter.printHelp("./asm", options);
 			System.exit(AssemblerException.ERR_LAUNCHER_BAD_PARAMS);
 			return;
 		}
@@ -61,7 +63,7 @@ public class Launcher {
 			String programFilename = cmd.getOptionValue("p");
 			
 			if (programFilename == null) {
-				formatter.printHelp("./Ass", options);
+				formatter.printHelp("./asm", options);
 				System.exit(AssemblerException.ERR_LAUNCHER_BAD_PARAMS);
 				return;
 			}
@@ -72,7 +74,7 @@ public class Launcher {
 			
 			AssemblerProgram program =  new AssemblerProgram(programFilename);
 			Interpreter interpreter = new Interpreter();
-			interpreter.translate(program);
+			interpreter.interprete(program);
 			System.exit(0); 
 			
 		} catch (AssemblerException e) {

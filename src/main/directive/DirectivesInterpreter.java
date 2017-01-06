@@ -1,19 +1,25 @@
 package main.directive;
 
-import main.AssemblerException;
+import main.InstructionManager;
+import main.InstructionManager.InstructionManagerState;
+import main.exception.AssemblerException;
 
 public class DirectivesInterpreter {
 	
-	public static final String DIRECTIVES_PREFIX = "." ;
 	
-	public int interpreteDirective(String directive) throws AssemblerException{
+	/**
+	 * @param directive
+	 * @return The result state after interpreting the directive
+	 * @throws AssemblerException When the directive is unknown
+	 */
+	public InstructionManagerState interpreteDirective(String directive) throws AssemblerException{
 		
 		switch (directive.trim().substring(1)) {
-			case "text" : return 2;
-			case "data" : return 1;
-			case "end" :  return 0 ;
+			case "text" : return InstructionManager.InstructionManagerState.RECORDING_ON_ROM;
+			case "data" : return InstructionManager.InstructionManagerState.RECORDING_ON_RAM;
+			case "end" :  return InstructionManager.InstructionManagerState.NOT_RECORDING ;
 		default:
-			throw new AssemblerException("Syntax Error : Unknow Directive for the Compilator ", AssemblerException.ERR_LAUNCHER_BFCK_RUNTIME_FAILED) ;
+			throw new AssemblerException("Syntax Error : Unknow Directive for the Compilator ", AssemblerException.ERR_ASM_RUNTIME_FAILED) ;
 		}
 		
 	}
